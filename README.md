@@ -1,4 +1,4 @@
-# FaceTrace
+# About FaceTrace
 
 ![Project's banner](./resources/Website.png)
 
@@ -6,3 +6,10 @@ Facetrace is a **dummy website** for the latest short-film under **Francesco La 
 
 It mimics a **FaceOSINT**, iterating between 100 faces.
 At the end it will display: "**match not found**".
+
+# Development
+
+To create FaceTrace I used:
+
+- [NPM](https://www.npmjs.com/)
+- [TailwindCSS](https://tailwindcss.com/)
