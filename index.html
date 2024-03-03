@@ -3,32 +3,124 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Face osint</title>
-        <link rel="stylesheet" href="./output.css">
+        <title>FaceTrace</title>
+        <link rel="stylesheet" href="./resources/style.css">
+        <link rel="icon" href="./resources/logo.png" type="image/png">
     </head>
-    <body class=" bg-blue-500 text-white overflow-hidden">
-
-        <div class="absolute inset-0 w-full h-full object-cover backdrop-blur-sm"></div>
-        <video class="absolute inset-0 w-full h-full object-cover z-[-1]" autoplay loop muted>
-            <source src="./video (2160p).mp4" type="video/mp4">    
-        </video>
-
-        <div class="absolute w-screen h-screen z-10">
-            <h1 class="text-center text-6xl mt-20 font-black"> FACE OSINT </h1>
-            <p class="text-center text-4xl mt-5 font-light"> n°1 al mondo per riconoscimento volti </p>  
-            
-            <div class="w-full flex justify-center items-center mt-20 flex">
-                <div class=" border-white border-dashed w-1/4 h-1/3 border-[5px] p-10 rounded-lg flex-col flex justify-center items-center">
-                    <svg class="w-32 h-32 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 5v9m-5 0H5a1 1 0 0 0-1 1v4c0 .6.4 1 1 1h14c.6 0 1-.4 1-1v-4c0-.6-.4-1-1-1h-2M8 9l4-5 4 5m1 8h0"/>
-                    </svg>
-                    <p class="text-2xl text-center m-10 mb-2"> INSERISCI IL VOLTO </p>
+    <body class=" bg-white overflow-hidden">
+        
+        <header class="relative top-0 z-20 w-screen h-20 flex flex-row justify-between bg-blue-500">
+            <div class="flex flex-row justify-center ">
+                <img src="./resources/logo.png" alt="">
+                <div class=" flex justify-center items-center">
+                    <p class="text-4xl font-anta text-white">FaceTrace</p>
                 </div>
             </div>
+            <div class="flex flex-row justify-center items-center text-white font-anta">
+                <p class="mr-5 text-2xl">LOGIN</p>
+                <p class="mr-5 text-2xl">SIGNIN</p>
+            </div>
+        </header>
+
+        <img class="absolute -right-[325px] top-[220px] -scale-x-100 opacity-40" src="./resources/Face.png" alt="">
+        <img class="absolute -left-[325px] top-[220px] opacity-40" src="./resources/Face.png" alt="">
+        <img class="absolute left-[700px] top-[340px] scale-[4.5] opacity-40" src="./resources/Wave.png" alt="">
+
+        <div class="absolute w-screen h-screen z-10 text-black">
+
+            <h1 class="text-center text-6xl mt-20 font-black font-anta"> FACETRACE </h1>
+            <p class="text-center text-4xl mt-5 font-semibold font-kodemono"> n°1 al mondo per riconoscimento volti </p>  
+            
+            <div  id="pictureDiv" class="w-full flex justify-center items-center mt-20 flex-col">
+                <form action="/file-upload" class="dropzone flex justify-center w-full" id="my-awesome-dropzone">
+                    <label class=" cursor-pointer border-black border-dashed w-1/4 h-1/3 border-[5px] p-10 rounded-lg flex-col flex justify-center items-center">
+                        <svg class="w-32 h-32 text-black" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 5v9m-5 0H5a1 1 0 0 0-1 1v4c0 .6.4 1 1 1h14c.6 0 1-.4 1-1v-4c0-.6-.4-1-1-1h-2M8 9l4-5 4 5m1 8h0"/>
+                        </svg>
+                        <p class="text-2xl text-center m-10 mb-2 font-kodemono"> INSERISCI IL VOLTO </p>
+                        <input id="dropzone-file" type="file" class="hidden" onchange="insertedImage()">
+                    </label>
+                </form>
+            </div>
+            <div class="hidden w-screen flex-row  justify-center mt-20">
+                <img id="img" class=" rounded-xl w-80 h-80 mr-5" src="" alt="">
+                <img id="face" class="rounded-xl w-80 h-80 ml-5" src="resources/faces/1.jpeg" alt="Face Image">
+            </div>
+
+            <div id="corrispondenza" class="hidden justify-center items-center mt-[200px] w-screen">
+                <h1 id="tCorr" class="text-red-500 text-4xl font-black text-center"> NESSUNA CORRISPONDENZA </h1>
+            </div>
+
+            <div class=" w-screen absolute bottom-[100px] flex flex-col mt-20 text-black font-anta font-light justify-center items-center">
+                <p> VERSIONE 1.4.2</p>
+                <a href="www.google.com" class="text-blue-500">GUARDA I CHANGELOGS</a>
+            </div>
+
         </div>
 
 
         
-
     </body>
+
+<script>
+
+    var inputBox = document.getElementById("pictureDiv");
+    var img = document.getElementById("img");
+    var inputBar = document.getElementById("dropzone-file");
+    var noCorr = document.getElementById("corrispondenza");
+    var tCorr = document.getElementById("tCorr");
+
+    var currentImageNumber = 1;
+    const totalImages = 100;
+
+    var intervallo = null;
+    var isVisible = true;
+
+
+    function insertedImage() 
+    {
+        var file = inputBar.files[0];                      
+
+
+        var reader = new FileReader();
+
+        reader.onload = function (e) {
+            img.src = e.target.result;
+            inputBox.style.display = "none";
+
+            img.parentElement.style.display = "flex";
+        };
+
+        reader.readAsDataURL(file);
+        
+        // Change image every 0.5 seconds
+        intervallo = setInterval(changeImage, 100);
+    }
+
+    function changeImage() {        
+        // Increment the current image number
+        currentImageNumber = currentImageNumber + 1;
+
+        // Get the 'face' element and update its 'src' attribute
+        const faceImage = document.getElementById('face');
+        faceImage.src = `resources/faces/${currentImageNumber}.jpeg`;
+
+        if(currentImageNumber >= totalImages)
+        {
+            clearInterval(intervallo);
+            img.parentElement.style.display = "none";
+            noCorr.style.display = "flex";
+            // Esegui la funzione blinkText ogni 3 secondi
+            setInterval(blinkText, 500);
+        }
+    }
+
+    function blinkText() {
+        // Cambia la visibilità in base allo stato attuale
+        tCorr.style.color = isVisible ? 'rgb(240 82 82)' : 'transparent';
+        isVisible = !isVisible;
+    }
+
+</script>
+
 </html>
